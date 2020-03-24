@@ -27,7 +27,7 @@ unicode-width = "0.1"
 unicode-segmentation = "1.0"
 memchr = "2.0"
 
-[target.'cfg(unix)'.dependencies]
+[target.'cfg(all(unix, not(target_os = "emscripten")))'.dependencies]
 nix = "0.17"
 utf8parse = "0.2"
 skim = { version = "0.7", optional = true }

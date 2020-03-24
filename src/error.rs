@@ -18,10 +18,10 @@ pub enum ReadlineError {
     /// Ctrl-C
     Interrupted,
     /// Chars Error
-    #[cfg(unix)]
+    #[cfg(all(unix, not(target_os = "emscripten")))]
     Utf8Error,
     /// Unix Error from syscall
-    #[cfg(unix)]
+    #[cfg(all(unix, not(target_os = "emscripten")))]
     Errno(nix::Error),
     #[cfg(windows)]
     WindowResize,
@@ -35,9 +35,9 @@ impl fmt::Display for ReadlineError {
             ReadlineError::Io(ref err) => err.fmt(f),
             ReadlineError::Eof => write!(f, "EOF"),
             ReadlineError::Interrupted => write!(f, "Interrupted"),
-            #[cfg(unix)]
+            #[cfg(all(unix, not(target_os = "emscripten")))]
             ReadlineError::Utf8Error => write!(f, "invalid utf-8: corrupt contents"),
-            #[cfg(unix)]
+            #[cfg(all(unix, not(target_os = "emscripten")))]
             ReadlineError::Errno(ref err) => err.fmt(f),
             #[cfg(windows)]
             ReadlineError::WindowResize => write!(f, "WindowResize"),
@@ -61,7 +61,7 @@ impl From<io::ErrorKind> for ReadlineError {
     }
 }
 
-#[cfg(unix)]
+#[cfg(all(unix, not(target_os = "emscripten")))]
 impl From<nix::Error> for ReadlineError {
     fn from(err: nix::Error) -> Self {
         ReadlineError::Errno(err)

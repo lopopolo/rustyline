@@ -167,7 +167,7 @@ impl Default for BellStyle {
         BellStyle::None
     }
 
-    #[cfg(unix)]
+    #[cfg(all(unix, not(target_arch = "wasm32")))]
     fn default() -> Self {
         BellStyle::Audible
     }
